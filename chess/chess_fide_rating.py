@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pydantic import BaseModel
 
-TODO: Get completion in VIM
+# TODO: Get completion in VIM
 
 class Rating(BaseModel):
     df: pd.DataFrame
