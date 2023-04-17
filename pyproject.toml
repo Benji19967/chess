@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "chess"
+version = "0.1.0"
+description = "Data Science questions about a chess data set"
+authors = [ "Benjamin Labrecque" ]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^1.10.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+black = "^23.1.0"
+
+[tool.mypy]
+files = "testing"
+strict = true
+namespace_packages = true
+explicit_package_bases = true
+
+[tool.black]
+line-length = 80
