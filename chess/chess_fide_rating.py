@@ -2,21 +2,16 @@ from typing import Dict
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from pydantic import BaseModel
+
+from chess.load_data import load_players_df, load_ratings_dfs
 
 # TODO: Get completion in VIM
 
-class Rating(BaseModel):
-    df: pd.DataFrame
+### Load data
+df_players: pd.DataFrame = load_players_df()
+ratings_dfs: Dict[int, pd.DataFrame] = load_ratings_dfs()
 
-
-DATA_DIR = "~/apps/home/labrecqb/chess/data/kaggle/chess_fide_ratings/archive/"
-df_players = pd.read_csv(DATA_DIR + "players.csv")
-ratings_dfs: Dict[int, pd.DataFrame] = dict()
-for year in range(2016, 2022):
-    ratings_dfs[year] = pd.read_csv(DATA_DIR + f"ratings_{year}.csv")
-
-# Questions
+### Questions
 
 # 1) Find the range for different ratings. Example: IM == [2000, 2200)
 # 2) Find the 10 highest rated players in 2016
@@ -47,7 +42,10 @@ df = ratings_dfs[2016]
 df
 
 # Get highest rating among all months for each player
-idx = df.groupby(["fide_id"])["rating_standard"].transform(max) == df["rating_standard"]
+idx = (
+    df.groupby(["fide_id"])["rating_standard"].transform(max)
+    == df["rating_standard"]
+)
 df_highest_rating_per_player = df[idx]
 
 df.nlargest(n=10, columns="rating_standard")
