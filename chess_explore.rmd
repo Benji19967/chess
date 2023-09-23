@@ -6,14 +6,21 @@ output: html_document
 
 ```{r results='hide'}
 library(tidyverse)
+# options(width=150)
 ```
 
 ```{r}
-players <- read.csv(Sys.getenv("DATA_PLATERS"))
-dims(players)
+players <- read.csv(Sys.getenv("DATA_PLAYERS"))
+dim(players)
 names(players)
 # structure(players)
 head(players)
 summary(players$yob)
 unique(players$yob)
+sort(unique(players$yob))
+table(players$yob)
+sort(table(players$federation), decreasing = TRUE)
+# barplot(sort(table(players$yob)))
+boxplot(players[players$yob != 0,]$yob)
+hist(players[players$yob != 0,]$yob)
 ```
