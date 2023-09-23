@@ -1,0 +1,19 @@
+---
+title: Chess Explore
+author: Benjamin Labrecque
+output: html_document
+---
+
+```{r results='hide'}
+library(tidyverse)
+```
+
+```{r}
+players <- read.csv(Sys.getenv("DATA_PLATERS"))
+dims(players)
+names(players)
+# structure(players)
+head(players)
+summary(players$yob)
+unique(players$yob)
+```
