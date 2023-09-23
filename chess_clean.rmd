@@ -37,13 +37,94 @@ class(players$title)
 
 Set levels in correct order.
 ```{r}
-players$title <- factor((players$title), levels = c("GM", "IM", "FM", "CM", "WGM", "WIM", "WFM", "WCM", "FI", "NI", "DI"))
+players$title <- factor((players$title), levels = c("GM", "IM", "FM", "CM", "WGM", "WIM", "WFM", "WCM", "FI", "NI", "DI", "Not ranked"))
 levels(players$title)
 ```
 
 ## Selecting columns
 
 ```{r}
-players %>% select(title, yob, ends_with("der")) %>% names()
+players %>% 
+    select(title, yob, ends_with("der")) %>% 
+    names()
 ```
 
+```{r}
+players %>% 
+    select(name, title, yob) %>% 
+    filter(title %in% c("GM", "IM") & yob > 2005) 
+```
+
+## Missing Data
+
+Removing missing data -- this should NOT be the go-to solution. Why is some data missing?
+```{r}
+mean(players$yob, na.rm = TRUE)
+
+players %>% 
+    head()
+
+players %>% 
+    na.omit() %>% 
+    head()
+```
+
+Get all rows with missing values (\<NA\>)
+```{r}
+players %>% 
+    filter(!complete.cases(.)) %>% 
+    head()
+
+players %>% 
+    filter(!complete.cases(.)) %>% 
+    count() # Num rows with at least one missing value
+
+players %>% 
+    filter(complete.cases(.)) %>% 
+    count() # Num rows with no missing values
+
+players %>% 
+    filter(!complete.cases(.)) %>% 
+    drop_na(title) %>% 
+    head()
+```
+
+This shows us that all the missing values are in the "title" column, since
+no rows are left once we drop the NA rows from the "title" column.
+```{r}
+players %>% 
+    filter(!complete.cases(.)) %>% 
+    drop_na(title) %>% 
+    head()
+```
+
+Mutate data to replace NA values. If the column is a factor, new values must be in levels.
+```{r}
+players %>% 
+    filter(!complete.cases(.)) %>% 
+    mutate(title = replace_na(title, "Not ranked")) %>% 
+    head()
+```
+
+## Duplicates
+```{r}
+Names <- c("Peter", "Bob", "Ana", "Peter")
+Ages <- c(22, 12, 17, 22)
+
+friends <- data.frame(Names, Ages)
+duplicated(friends)
+friends[!duplicated(friends),]
+
+friends %>% 
+    distinct() # tidyverse way
+```
+
+## Recoding variables
+```{r}
+players %>% 
+    select(name, gender) %>%
+    mutate(gender_coded = recode(gender, 
+                                "M" = 1,
+                                "F" = 2)) %>%
+    head()
+```
