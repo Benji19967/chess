@@ -1,0 +1,49 @@
+---
+title: Chess Clean
+author: Benjamin Labrecque
+output: html_document
+---
+
+Resource: https://www.youtube.com/watch?v=sV5lwAJ7vnQ&ab_channel=RProgramming101
+
+```{r results='hide'}
+library(tidyverse)
+```
+
+## Load the data
+```{r}
+players <- read.csv(Sys.getenv("DATA_PLAYERS"))
+```
+
+## Get a glimpse of the data
+
+This shows us the data types of each column and can be useful for knowing if we want
+to turn a column from `chr` to a factor column.
+```{r}
+glimpse(players)
+```
+
+What are all possible values for title?
+```{r}
+unique(players$title)
+```
+
+## Convert character column to factor column
+
+```{r}
+players$title <- as.factor(players$title)
+class(players$title)
+```
+
+Set levels in correct order.
+```{r}
+players$title <- factor((players$title), levels = c("GM", "IM", "FM", "CM", "WGM", "WIM", "WFM", "WCM", "FI", "NI", "DI"))
+levels(players$title)
+```
+
+## Selecting columns
+
+```{r}
+players %>% select(title, yob, ends_with("der")) %>% names()
+```
+
